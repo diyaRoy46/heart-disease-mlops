@@ -29,3 +29,9 @@ data/raw/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Raw screen recordings (only the final mp4 is committed)
+docs/pipeline-demo.mov
