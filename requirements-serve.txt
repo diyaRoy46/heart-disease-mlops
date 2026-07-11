@@ -1,0 +1,13 @@
+# Minimal dependencies for the serving container.
+# Model-critical packages are pinned to the training environment versions so
+# the pickled sklearn pipeline deserializes identically.
+scikit-learn==1.9.0
+numpy==2.5.1
+pandas==2.3.3
+joblib==1.5.3
+
+fastapi>=0.115
+uvicorn>=0.34
+pydantic>=2.10
+prometheus-fastapi-instrumentator>=7.0
+requests>=2.32
