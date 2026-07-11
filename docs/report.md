@@ -1,6 +1,6 @@
 # Heart Disease Risk Prediction — MLOps Project Report
 
-**Author:** Raj Singha
+**Author:** Diya Roy
 **Date:** July 2026
 **Repository:** https://github.com/diyaRoy46/heart-disease-mlops
 
