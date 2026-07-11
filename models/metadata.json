@@ -1,0 +1,20 @@
+{
+  "model_name": "logistic_regression",
+  "best_params": {
+    "classifier__C": 0.1,
+    "classifier__class_weight": "balanced"
+  },
+  "metrics": {
+    "test_accuracy": 0.8852,
+    "test_precision": 0.8387,
+    "test_recall": 0.9286,
+    "test_f1": 0.8814,
+    "test_roc_auc": 0.9654,
+    "cv_roc_auc_mean": 0.9028,
+    "cv_roc_auc_std": 0.0169
+  },
+  "mlflow_run_id": "6e852303b7664724b9e79f5a6e0b88aa",
+  "trained_at": "2026-07-11T17:03:58.030060+00:00",
+  "sklearn_version": "1.9.0",
+  "python_version": "3.14.5"
+}
