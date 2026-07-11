@@ -2,7 +2,7 @@
 
 **Author:** Raj Singha
 **Date:** July 2026
-**Repository:** `<add GitHub URL after pushing>`
+**Repository:** https://github.com/diyaRoy46/heart-disease-mlops
 
 ---
 
