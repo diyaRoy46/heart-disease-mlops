@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Testing / tooling
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# MLflow local tracking store (runs are reproducible via `make train`)
+mlruns/
+mlartifacts/
+mlflow.db
+
+# Data downloads (raw data is re-fetched by scripts/download_data.py;
+# the cleaned CSV in data/ IS committed for reproducibility)
+data/raw/
+
+# Jupyter
+.ipynb_checkpoints/

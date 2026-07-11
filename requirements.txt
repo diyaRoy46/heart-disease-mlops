@@ -1,0 +1,26 @@
+# Core data stack
+pandas>=2.2
+numpy>=2.0
+scikit-learn>=1.6
+
+# Visualization (EDA)
+matplotlib>=3.9
+seaborn>=0.13
+
+# Experiment tracking
+mlflow>=2.20
+
+# Model persistence
+joblib>=1.4
+
+# Serving
+fastapi>=0.115
+uvicorn[standard]>=0.34
+pydantic>=2.10
+prometheus-fastapi-instrumentator>=7.0
+
+# Data download
+requests>=2.32
+
+# Markdown tables in reports (pandas .to_markdown)
+tabulate>=0.9
