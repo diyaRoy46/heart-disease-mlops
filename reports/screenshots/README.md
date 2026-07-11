@@ -1,14 +1,14 @@
-# Screenshots for the final report
+# Screenshots
 
-Capture these after running the corresponding stage and drop them here (the
-report in `docs/report.md` references these filenames):
+Captured evidence referenced by `docs/report.md`:
 
-| File | How to capture |
+| File | Shows |
 |---|---|
-| `mlflow-runs.png` | `make mlflow-ui` → experiment *heart-disease-classification* run table |
-| `mlflow-artifacts.png` | any run → Artifacts → `plots/roc_curve.png` |
-| `ci-pipeline.png` | GitHub → Actions → a green CI run (all four jobs) |
-| `grafana-dashboard.png` | `make compose-up`, send a few `/predict` requests, open the **Heart Disease API** dashboard on :3000 |
-| `prometheus-targets.png` | :9090 → Status → Targets (`heart-disease-api` **UP**) |
-| `kubectl-get-all.png` | `kubectl get all` after `make k8s-apply` |
-| `k8s-curl.png` | `curl http://<EXTERNAL-IP>/health` against the LoadBalancer |
+| `mlflow-runs.png` | MLflow *heart-disease-classification* experiment run table |
+| `mlflow-run-overview.png` | Best run (logistic_regression): metrics + tuned parameters |
+| `mlflow-artifacts.png` | Run artifacts: ROC curve preview |
+| `grafana-dashboard.png` | Grafana dashboard under live traffic (rate, latency, outcomes, errors) |
+| `prometheus-targets.png` | Prometheus targets — API scrape **UP** |
+| `kubectl-get-all.png` | Minikube deployment: 2/2 pods Running, LoadBalancer service |
+| `k8s-curl.png` | /health and /predict served through the Kubernetes service |
+| `ci-pipeline.png` | **TODO** — capture from GitHub → Actions after the first green run |

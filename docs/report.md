@@ -67,9 +67,14 @@ Figures in `reports/figures/`, summary in `reports/eda_summary.md`.
   tree models can still exploit interactions, and the cost is negligible.
 - No degenerate columns; one exact duplicate policy applied (dedup in cleaning).
 
-Key figures: `01_class_distribution.png`, `02_missing_values.png`,
-`03_histograms.png`, `04_correlation_heatmap.png`, `05_numeric_by_target.png`,
-`06_categorical_by_target.png`, `07_roc_curves.png`.
+![Class distribution](../reports/figures/01_class_distribution.png)
+
+![Correlation heatmap](../reports/figures/04_correlation_heatmap.png)
+
+![Numeric features vs. target](../reports/figures/05_numeric_by_target.png)
+
+Further figures in `reports/figures/`: `02_missing_values.png`,
+`03_histograms.png`, `06_categorical_by_target.png`.
 
 ## 4. Model development & comparison
 
@@ -98,6 +103,8 @@ are hard to beat. Recall of 0.93 means few missed disease cases; the
 `class_weight=balanced` setting deliberately trades a little precision for
 recall, which is the right direction for screening.
 
+![ROC curves on the held-out test set](../reports/figures/07_roc_curves.png)
+
 ## 5. Experiment tracking (MLflow)
 
 - Tracking store: `sqlite:///mlflow.db` (MLflow 3.x deprecates the `./mlruns`
@@ -108,8 +115,11 @@ recall, which is the right direction for screening.
   and the fitted pipeline as an MLflow sklearn model with input example.
 - Browse with `mlflow ui --backend-store-uri sqlite:///mlflow.db`.
 
-> **Screenshot placeholder:** `reports/screenshots/mlflow-runs.png`,
-> `reports/screenshots/mlflow-artifacts.png`
+![MLflow experiment runs](../reports/screenshots/mlflow-runs.png)
+
+![Best run: metrics and tuned parameters](../reports/screenshots/mlflow-run-overview.png)
+
+![Run artifacts: ROC curve](../reports/screenshots/mlflow-artifacts.png)
 
 ## 6. Model packaging & reproducibility
 
@@ -153,7 +163,8 @@ predict, optional fields, metrics endpoint).
 `train` and `docker` only run after `lint` and `test` succeed, so a red check
 blocks the artifact and image stages — the pipeline stops and reports clearly.
 
-> **Screenshot placeholder:** `reports/screenshots/ci-pipeline.png`
+> Screenshot: `reports/screenshots/ci-pipeline.png` (capture from GitHub →
+> Actions once the pipeline has run on the pushed repository).
 
 ## 9. Deployment
 
@@ -162,17 +173,23 @@ blocks the artifact and image stages — the pipeline stops and reports clearly.
 correct responses. Image: `python:3.14-slim`, non-root user, HEALTHCHECK,
 serving-only dependencies.
 
-**Kubernetes (`k8s/`):** Deployment (2 replicas, readiness/liveness probes on
-`/health`, CPU/memory requests+limits, Prometheus scrape annotations) and a
-LoadBalancer Service (port 80 → 8000). On Minikube:
+**Kubernetes (verified on Minikube v1.35 / Kubernetes v1.35.1):** Deployment
+(2 replicas, readiness/liveness probes on `/health`, CPU/memory
+requests+limits, Prometheus scrape annotations) and a LoadBalancer Service
+(port 80 → 8000):
 
 ```bash
-eval $(minikube docker-env) && docker build -t heart-disease-api:latest .
-kubectl apply -f k8s/ && minikube tunnel
+minikube image load heart-disease-api:latest   # or build via minikube docker-env
+kubectl apply -f k8s/
+minikube service heart-disease-api --url       # or: minikube tunnel
 ```
 
-> **Screenshot placeholder:** `reports/screenshots/kubectl-get-all.png`,
-> `reports/screenshots/k8s-curl.png`
+Both replicas reached `Running/Ready` and the API served predictions through
+the cluster service:
+
+![kubectl get all — pods, service, deployment](../reports/screenshots/kubectl-get-all.png)
+
+![Endpoint verification through the Kubernetes service](../reports/screenshots/k8s-curl.png)
 
 ## 10. Monitoring & logging
 
@@ -186,8 +203,9 @@ kubectl apply -f k8s/ && minikube tunnel
   shift in the predicted-positive rate flags a change in incoming data.
 - Structured request logs (`docker logs heart-disease-api`) cover every call.
 
-> **Screenshot placeholder:** `reports/screenshots/grafana-dashboard.png`,
-> `reports/screenshots/prometheus-targets.png`
+![Grafana dashboard under live traffic](../reports/screenshots/grafana-dashboard.png)
+
+![Prometheus targets — API scrape UP](../reports/screenshots/prometheus-targets.png)
 
 ## 11. Setup instructions (clean machine)
 

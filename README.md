@@ -164,3 +164,13 @@ cluster (EKS/GKE/AKS), push the image to a registry and update
 - Fixed random seeds (`src/config.py`) and a stratified train/test split.
 - `make train` retrains and re-exports the model deterministically from the
   committed dataset.
+
+> **Note (Python 3.14):** `mlflow ui` in mlflow 3.14 fails on Python 3.14 with
+> `ImportError: cannot import name 'Traversable' from 'importlib.abc'` (the
+> alias was removed from the stdlib). Experiment *tracking* is unaffected.
+> Workaround until mlflow ships a fix — add a `.pth` shim to your venv:
+>
+> ```bash
+> echo "import importlib.abc, importlib.resources.abc as _ra; hasattr(importlib.abc, 'Traversable') or (setattr(importlib.abc, 'Traversable', _ra.Traversable), setattr(importlib.abc, 'TraversableResources', _ra.TraversableResources))" \
+>   > .venv/lib/python3.14/site-packages/_mlflow_py314_compat.pth
+> ```
