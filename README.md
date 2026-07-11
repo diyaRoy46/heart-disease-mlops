@@ -5,6 +5,23 @@ patient health data (UCI Heart Disease dataset, Cleveland subset), covering the
 full lifecycle: EDA → training with experiment tracking → tested, containerized
 FastAPI serving → CI/CD → Kubernetes deployment → Prometheus/Grafana monitoring.
 
+**📹 Demo video:** [`docs/pipeline-demo.mp4`](docs/pipeline-demo.mp4) (6½ min, walks the
+entire pipeline end to end) · **📄 Report:** [`docs/report.pdf`](docs/report.pdf)
+
+## Where to find each assignment task
+
+| # | Task | Evidence |
+|---|------|----------|
+| 1 | Data acquisition & EDA | [`scripts/download_data.py`](scripts/download_data.py), [`src/eda.py`](src/eda.py), figures in [`reports/figures/`](reports/figures/), [`reports/eda_summary.md`](reports/eda_summary.md) |
+| 2 | Feature engg. & models | [`src/pipeline.py`](src/pipeline.py) (preprocessing), [`src/train.py`](src/train.py) (3 models, 5-fold GridSearchCV), results in [`reports/model_comparison.md`](reports/model_comparison.md) |
+| 3 | Experiment tracking | MLflow in [`src/train.py`](src/train.py) — params, metrics, ROC/confusion artifacts per run (`make train` then `make mlflow-ui`) |
+| 4 | Packaging & reproducibility | [`models/model.joblib`](models/) (full sklearn pipeline) + [`models/metadata.json`](models/metadata.json), pinned [`requirements-serve.txt`](requirements-serve.txt) |
+| 5 | CI/CD & tests | [`tests/`](tests/) (pytest), [`.github/workflows/ci.yml`](.github/workflows/ci.yml) — lint → test → train → docker smoke, artifacts uploaded per run ([Actions](https://github.com/diyaRoy46/heart-disease-mlops/actions)) |
+| 6 | Containerization | [`Dockerfile`](Dockerfile) — `/predict` accepts JSON, returns prediction + confidence (see [Docker](#docker)) |
+| 7 | Production deployment | [`k8s/`](k8s/) — Deployment (2 replicas, probes) + LoadBalancer Service (see [Kubernetes](#kubernetes-kind-minikube-or-cloud)) |
+| 8 | Monitoring & logging | [`monitoring/`](monitoring/), [`docker-compose.yml`](docker-compose.yml) — request logging, Prometheus scrape, pre-provisioned Grafana dashboard |
+| 9 | Documentation & report | This README + [`docs/report.pdf`](docs/report.pdf), screenshots in [`reports/screenshots/`](reports/screenshots/) |
+
 ## Architecture
 
 ```mermaid
@@ -104,7 +121,25 @@ The dashboard shows request rate, p50/p95 latency, predictions by outcome
 (`model_predictions_total`) and HTTP error rates. Every request is also logged
 with method, path, status and latency.
 
-## Kubernetes (Minikube or cloud)
+## Kubernetes (kind, Minikube or cloud)
+
+Used in the demo video: a [kind](https://kind.sigs.k8s.io/) cluster.
+
+```bash
+kind create cluster --name heart-disease          # once
+docker build -t heart-disease-api:latest .
+kind load docker-image heart-disease-api:latest --name heart-disease
+
+kubectl apply -f k8s/
+kubectl rollout status deploy/heart-disease-api
+
+# kind has no cloud load balancer; port-forward the Service to test:
+kubectl port-forward svc/heart-disease-api 8080:80 &
+curl http://localhost:8080/health
+```
+
+<details>
+<summary>Minikube alternative</summary>
 
 ```bash
 # Minikube: build the image inside the cluster's Docker daemon
@@ -116,6 +151,7 @@ minikube tunnel            # gives the LoadBalancer service an external IP
 kubectl get svc heart-disease-api
 curl http://<EXTERNAL-IP>/health
 ```
+</details>
 
 The Deployment runs 2 replicas with readiness/liveness probes on `/health`,
 resource requests/limits, and Prometheus scrape annotations. For a cloud
@@ -152,7 +188,7 @@ cluster (EKS/GKE/AKS), push the image to a registry and update
 ├── monitoring/                 # Prometheus config, Grafana provisioning + dashboard
 ├── .github/workflows/ci.yml    # lint / test / train / docker pipeline
 ├── reports/                    # EDA figures, model comparison, screenshots
-└── docs/report.md              # final project report
+└── docs/                       # report.pdf + pipeline-demo.mp4 (demo video)
 ```
 
 ## Reproducibility notes
