@@ -163,8 +163,7 @@ predict, optional fields, metrics endpoint).
 `train` and `docker` only run after `lint` and `test` succeed, so a red check
 blocks the artifact and image stages — the pipeline stops and reports clearly.
 
-> Screenshot: `reports/screenshots/ci-pipeline.png` (capture from GitHub →
-> Actions once the pipeline has run on the pushed repository).
+![CI pipeline run — all jobs green, model artifact uploaded](../reports/screenshots/ci-pipeline.png)
 
 ## 9. Deployment
 

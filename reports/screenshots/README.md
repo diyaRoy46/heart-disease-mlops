@@ -11,4 +11,4 @@ Captured evidence referenced by `docs/report.md`:
 | `prometheus-targets.png` | Prometheus targets — API scrape **UP** |
 | `kubectl-get-all.png` | Minikube deployment: 2/2 pods Running, LoadBalancer service |
 | `k8s-curl.png` | /health and /predict served through the Kubernetes service |
-| `ci-pipeline.png` | **TODO** — capture from GitHub → Actions after the first green run |
+| `ci-pipeline.png` | GitHub Actions run 29162223286: all four jobs green, model artifact uploaded |
